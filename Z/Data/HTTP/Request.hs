@@ -1,6 +1,11 @@
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE DerivingStrategies #-}
+
 module Z.Data.HTTP.Request where
 
 import Control.Monad.State
+import GHC.Generics
 import qualified Z.Data.ASCII as C
 import qualified Z.Data.Builder as B
 import Z.Data.HTTP
@@ -15,7 +20,8 @@ data Request = Request
     requestVersion :: !HTTPVersion,
     requestHeaders :: Headers,
     requestBody :: Body
-  }
+  } deriving Generic
+    deriving T.Print
 
 emptyRequest :: Request
 emptyRequest = Request V.empty V.empty HTTP1_1 V.empty V.empty
@@ -28,7 +34,7 @@ pattern GET = "GET"
 type Path = V.Bytes
 
 newtype RequestBuilder a = RequestBuilder (State Request a)
-  deriving (Functor, Applicative, Monad, MonadState Request)
+  deriving newtype(Functor, Applicative, Monad, MonadState Request)
 
 buildRequest :: RequestBuilder a -> Request
 buildRequest (RequestBuilder s) = execState s emptyRequest
@@ -80,7 +86,7 @@ pattern LANG_FR :: Lang
 pattern LANG_FR = "fr"
 
 requestToBytes :: Request -> V.Bytes
-requestToBytes q = mconcat [method, SPACE, path, SPACE, version, CRLF, headers, CRLF, body, CRLF]
+requestToBytes q = mconcat [method, SPACE, path, SPACE, version, CRLF, headers, CRLF, body]
   where
     method :: V.Bytes = requestMethod q
     path :: V.Bytes = requestPath q

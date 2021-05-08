@@ -1,12 +1,19 @@
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DeriveAnyClass #-}
+
 module Z.Data.HTTP.Internal where
 
 import Data.Maybe
+import GHC.Generics
 import qualified Z.Data.ASCII as C
 import qualified Z.Data.Builder as B
 import qualified Z.Data.Parser as P
 import qualified Z.Data.Vector as V
+import qualified Z.Data.Text as T
 
-data HTTPVersion = HTTP1_1
+data HTTPVersion = HTTP1_1 
+  deriving Generic
+  deriving T.Print
 
 versionToBytes :: HTTPVersion -> V.Bytes
 versionToBytes = \case

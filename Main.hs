@@ -37,9 +37,11 @@ readme = do
           Q.http GET "/" HTTP1_1
           setHost mozHost
           setHeader AcceptLanguage LANG_FR
+          setHeader "Content-Length" "0"
     -- Send the request.
+    printStdLn (T.validate $ requestToBytes q)
     sendRequest c q
     -- Receive a response then perform some actions using the response.
     withResponse c $ \a -> putStrLn $ debugShow (responseToBytes a)
   where
-    mozHost :: Host = ("developer.mozilla.org", defaultPortHTTP)
+    mozHost :: Host = ("baidu.com", defaultPortHTTP)

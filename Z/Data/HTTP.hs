@@ -13,7 +13,7 @@ type Host :: *
 type Host = (HostName, PortNumber)
 
 hostToBytes :: Host -> V.Bytes
-hostToBytes (hostName, portNumber) = "Host: " <> toBytes hostName <> ":" <> B.build (B.int portNumber)
+hostToBytes (hostName, portNumber) = toBytes hostName 
 
 defaultPortHTTP :: PortNumber
 defaultPortHTTP = 80
